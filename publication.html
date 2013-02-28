@@ -5,7 +5,21 @@
 		<title>Post</title>
 <script type="text/javascript">
 // Script found here : http://www.ilu.be/wiki/Les_textarea
-eval(function(p,a,c,k,e,r){e=function(c){return c.toString(a)};if(!''.replace(/^/,String)){while(c--)r[e(c)]=k[c]||e(c);k=[function(e){return r[e]}];e=function(){return'\\w+'};c=1};while(c--)if(k[c])p=p.replace(new RegExp('\\b'+e(c)+'\\b','g'),k[c]);return p}('3 4(5,6,7){h 1=5&&5.i?5:8.9(5);2(!1)r;h 0=1.a;2(!6||6>0){0=b.j(1.k,0);2(6)0=b.s(6,0);2(0>1.a)1.i.o=0+"p"}2(!7||7<0){0=b.j(1.a,1.k);2(7)0=b.j(7,1.k);2(0<1.a)1.i.o=0+"p"}}q(3(){4("c",d,e);8.9("c").t=3(){4(l,d,e)};8.9("c").u=3(){4(l,d,e)};8.9("c").v=3(){4(l,d,e)}});3 q(m){h n=f.g;2(w f.g!=\'3\'){f.g=m}x{f.g=3(){2(n){n()}m()}}}',34,34,'adjustedHeight|text|if|function|FitToContent|id|maxHeight|minHeight|document|getElementById|clientHeight|Math|contenu|50000|100|window|onload|var|style|max|scrollHeight|this|func|oldonload|height|px|addLoadEvent|return|min|onkeyup|onmouseover|onmouseup|typeof|else'.split('|'),0,{}))
+function fitToContent(id, maxHeight, minHeight) {
+	var text = id && id.style ? id : document.getElementById(id);
+	if (!text) return;
+	var adjustedHeight = text.clientHeight;
+	if (!maxHeight || maxHeight > adjustedHeight) {
+		adjustedHeight = Math.max(text.scrollHeight, adjustedHeight);
+		if (maxHeight) adjustedHeight = Math.min(maxHeight, adjustedHeight);
+		if (adjustedHeight > text.clientHeight)	text.style.height = adjustedHeight + "px";
+	}
+	if (!minHeight || minHeight < adjustedHeight) {
+		adjustedHeight = Math.max(text.clientHeight, text.scrollHeight);
+		if (minHeight) adjustedHeight = Math.max(minHeight, text.scrollHeight);
+		if (adjustedHeight < text.clientHeight) text.style.height = adjustedHeight + "px";
+	}
+}
 // Script found here : http://www.editeurjavascript.com/scripts/scripts_formulaires_2_318.php
 var isMozilla = (navigator.userAgent.toLowerCase().indexOf('gecko')!=-1) ? true : false;
 var regexp = new RegExp("[\r]","gi");
@@ -80,6 +94,9 @@ function retrieveData() {
 window.onload = function() {
 	retrieveData();
 	var interval = window.setInterval(saveData, 2000);
+
+	fitToContent( "contenu", 50000 , 100);
+	document.getElementById("contenu").onkeyup = function() { fitToContent( this, 50000 , 100);};
 };
 </script>
 
