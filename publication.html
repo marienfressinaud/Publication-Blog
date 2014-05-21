@@ -1,7 +1,8 @@
-<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
-<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="fr" lang="fr">
+<!DOCTYPE html>
+<html xml:lang="fr" lang="fr">
 	<head>
-		<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+		<meta name="viewport" content="initial-scale=1.0" />
+		<meta charset="UTF-8" />
 		<title>Post</title>
 <script type="text/javascript">
 // Script found here : http://www.ilu.be/wiki/Les_textarea
@@ -20,62 +21,7 @@ function fitToContent(id, maxHeight, minHeight) {
 		if (adjustedHeight < text.clientHeight) text.style.height = adjustedHeight + "px";
 	}
 }
-// Script found here : http://www.editeurjavascript.com/scripts/scripts_formulaires_2_318.php
-var isMozilla = (navigator.userAgent.toLowerCase().indexOf('gecko')!=-1) ? true : false;
-var regexp = new RegExp("[\r]","gi");
 
-function storeCaret(selec) {
-	var oField = document.querySelector('#contenu');
-
-	if (isMozilla) {
-		// Si on est sur Mozilla
-		objectValue = oField.value;
-
-		deb = oField.selectionStart;
-		fin = oField.selectionEnd;
-
-		objectValueDeb = objectValue.substring( 0 , oField.selectionStart );
-		objectValueFin = objectValue.substring( oField.selectionEnd , oField.textLength );
-		objectSelected = objectValue.substring( oField.selectionStart ,oField.selectionEnd );
-
-		oField.value = objectValueDeb + "[" + selec + "]" + objectSelected + "[/" + selec + "]" + objectValueFin;
-		oField.selectionStart = objectValueDeb.length;
-		oField.selectionEnd = (objectValueDeb + "[" + selec + "]" + objectSelected + "[/" + selec + "]").length;
-		oField.focus();
-
-		oField.setSelectionRange(
-			oField.selectionEnd,
-			oField.selectionEnd
-		);
-	} else {
-		var str = document.selection.createRange().text;
-
-		if (str.length>0) {
-			// Si on a selectionné du texte
-			var sel = document.selection.createRange();
-			sel.text = "[" + selec + "]" + str + "[/" + selec + "]";
-			sel.collapse();
-			sel.select();
-		} else {
-			oField.focus(oField.caretPos);
-			oField.focus(oField.value.length);
-			oField.caretPos = document.selection.createRange().duplicate();
-
-			var bidon = "%~%";
-			var orig = oField.value;
-			oField.caretPos.text = bidon;
-			var i = oField.value.search(bidon);
-			oField.value = orig.substr(0,i) + "[" + selec + "][/" + selec + "]" + orig.substr(i, oField.value.length);
-			var r = 0;
-			for(n = 0; n < i; n++) {if(regexp.twest(oField.value.substr(n,2)) == true){r++;}};
-			pos = i + 2 + selec.length - r;
-			var r = oField.createTextRange();
-			r.moveStart('character', pos);
-			r.collapse();
-			r.select();
-		}
-	}
-}
 function saveData() {
 	var t = document.querySelector('#title').value;
 	var c = document.querySelector('#contenu').value;
@@ -105,8 +51,8 @@ window.onload = function() {
 	margin: 0; padding: 0;
 }
 body {
-	width: 50%; margin: 50px auto 400px;
-	background: radial-gradient(circle at 50% 0%, #fff 0%, #eee 100%) fixed; font-size: 95%; font-family: Palatino;
+	width: 70%; margin: 10px auto 400px;
+	background: radial-gradient(circle at 50% 0%, #fff 0%, #eee 100%) fixed; font-size: 95%;
 }
 input[type="submit"] {
 	position: fixed; top: 1px; right: 10px; padding: 2px 20px;
@@ -114,27 +60,17 @@ input[type="submit"] {
 }
 input[type="text"] {
 	display: block; width: 90%; margin: 0 auto 10px; padding: 10px;
-	background: none; color: #666; font-size: 200%; border: none; outline: none; font-family: Palatino; text-align: center; font-weight: bold; text-shadow: 0 0 1px #000;
+	background: none; color: #666; font-family: serif; font-size: 200%; border: none; outline: none; font-weight: bold; text-shadow: 0 0 1px #000; border-radius: 5px;
 }
 textarea {
 	display: block; width: 100%; max-width: 100%; min-height: 400px; padding: 10px; overflow: hidden;
-	background: none; color: #555; font-family: Palatino; border: none; outline: none; font-size: 110%; line-height: 160%; text-shadow: 0 0 1px #aaa;
+	background: #fafafa; color: #555; font-family: serif; border: 1px #ddd solid; font-size: 100%; line-height: 160%; border-radius: 5px;
+}
+input[type="text"]:focus,
+textarea:focus {
+	box-shadow: 3px 3px 3px #ddd inset;
 }
 
-#padder {
-	position: fixed; top: 0; left: 0; width: 100%; height: 28px;
-	color: #bbb; border-bottom: 1px solid #eaeaea; background: #fbfbfb;
-}
-	#toolbar {
-		width: 50%; margin: 0 auto;
-		text-align: center;
-	}
-		#toolbar img {
-			padding: 5px; margin: 0 5px; border: 1px solid #fbfbfb; cursor: pointer;
-		}
-			#toolbar img:active {
-				background: #fff; border-radius: 5px; border: 1px solid #eee;
-			}
 #copy {
 	margin: 20px 0 0;
 	font-size: 80%; text-align: center;
@@ -142,33 +78,28 @@ textarea {
 	#copy a {
 		 color: #bbb; text-decoration: none;
 	}
+
+@media(max-width: 840px) {
+	body {
+		width: 100%;
+		margin: 0 0 30px;
+	}
+	input[type="text"],
+	textarea {
+		box-sizing: padding-box;
+		width: 100%;
+		padding: 5px;
+		border: none;
+		border-radius: 0;
+	}
+	input[type="text"]:focus,
+	textarea:focus {
+		box-shadow: 0 3px 3px #ddd inset;
+	}
+}
 </style>
 	</head>
 	<body>
-	<div id="padder">
-		<div id="toolbar">
-			<img title="title" alt="title"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAYAAAAf8/9hAAAAGXRFWHRTb2Z0d2FyZQBBZG9iZSBJbWFnZVJlYWR5ccllPAAAAeNJREFUeNqcU89PGkEU/mZ3dhUIQjxxMZr0aNobjQdNL43xrlEvqGcxHgqxp0Zt04g9U/wRFRLCxR//gMaDCSHRs4ZrjRcWDpLgegCW7bwBFk3T0PKSycyb9973vvlmhmUymUfLsvyNRgO2beNfjDEGRVGgqmqZU3EoFEIvlk6n/Zw6k/26fwBTGJhYExPqgtaaeLFWZ1rbDRsjw0OgWt5Gc3v6oXFNFlCAKCoCsF6vw7KaPueqhKK9tjkA+/sHuLm+kQBnZ6eYnp4RHRWMjb1HOBxGNptFIrErWUxMjOPzWvQ1QDTyCSsrqzJB1zgCgYAEi0YjqFarOD45EfFleL1e7OzsOWLyjvIMAz4fVN7E9A8OwhJUKUxH+BmPQ9d15HI5kTfg6OMwUFUGl8sFTdPwZX0THrcbtVpN6kCD4oVCAecXl1haXHA0UBwxhIBFowhDJH3bXJdzqVgU+1x07sPTk4nvWzG8ezuKYDD4JwBdU6lUgmEY0qeZfNrv0zVsbHyF1+PG/Nws3X8HoH3fW7FtPD+bqFQq0qfZNE3Etn9IP5/P4/b2Dh8np3BweNR5Tclk0u7VUqmUzV8+zW5/oc32ZT4XH+KvCd2Mark455UQ5YP4VP9dTLXU8g29G/Rm5d8CDABvef6hdQjUhgAAAABJRU5ErkJggg==" onclick="storeCaret('h')" />
-			<img title="bold" alt="bold"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAtFBMVEX09PTy8vLx8fHg4ODLy8u5ubm2tra1tbWzs7Ovr6+rq6unp6elpaWioqKenp6ampqZmZmXl5eWlpaVlZWQkJCPj4+JiYmIiIiDg4OCgoKBgYGAgIB9fX14eHh3d3dzc3NwcHBra2tpaWloaGhnZ2dkZGRhYWFeXl5cXFxYWFhVVVVTU1NSUlJOTk5NTU1MTExFRUVDQ0NAQEA/Pz83NzcsLCwoKCglJSUjIyMeHh4bGxv///8NrkJVAAAAPHRSTlP//////////////////////////////////////////////////////////////////////////////wC7iOunAAAACXBIWXMAAAsSAAALEgHS3X78AAAAH3RFWHRTb2Z0d2FyZQBNYWNyb21lZGlhIEZpcmV3b3JrcyA4tWjSeAAAAHhJREFUGJVjsEYDDEQJsIjIy7ILKwkywFWwKotaWwtpK8IF2FTFrK259YzgAhzqEtYMGgaScAFOTWUeFUNlhC1cOnLW1tImukwwAW59BWtrRnNTAZgAr4ESkLQyE4cJ8BlrWVvzW1gyQwXY5dU0pGR05ZiJ9wsKAACxbDKSZTxLAAAAAABJRU5ErkJggg==" onclick="storeCaret('b')" />
-			<img title="italic" alt="italic"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAYFBMVEXg4ODd3d3MzMzCwsK9vb28vLy0tLSenp6ZmZmTk5OKiop+fn59fX1xcXFtbW1iYmJhYWFgYGBfX19bW1tYWFhWVlZRUVFPT09ISEhHR0dERERDQ0M3Nzc0NDQnJyf///+i8orUAAAAIHRSTlP/////////////////////////////////////////AFxcG+0AAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAfdEVYdFNvZnR3YXJlAE1hY3JvbWVkaWEgRmlyZXdvcmtzIDi1aNJ4AAAASElEQVQYlWOQRwMMRAuw8Qnx86Co4BVhQVHBICqCqoVdjAtVQECCGUWAUUoS1RZOaW5UAXEZVhQBJlk5FIdxCAqLCpLsFzgAAFGgHO4Q2Rg8AAAAAElFTkSuQmCC" onclick="storeCaret('i')" />
-			<img title="underline" alt="underline"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAjVBMVEX19fXo6Ojm5ubl5eXi4uLT09PLy8vIyMjDw8Ozs7OxsbGcnJyYmJiVlZWSkpKRkZGMjIyHh4eBgYGAgIB/f399fX13d3d2dnZzc3NwcHBtbW1paWlnZ2diYmJgYGBdXV1cXFxaWlpYWFhQUFBKSkpGRkYqKiojIyMdHR0WFhYSEhIMDAwHBwcDAwP///9ZvcfaAAAAL3RSTlP/////////////////////////////////////////////////////////////AFqlOPcAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAfdEVYdFNvZnR3YXJlAE1hY3JvbWVkaWEgRmlyZXdvcmtzIDi1aNJ4AAAAaElEQVQYlXXO5wqAYAgF0Pbee+89vvd/vELIIsofCscrSJFXUV8geKFyDqOWr4QWwS7CEz2BdIBgZgAxglUApAh2A5AjOC1AhaB20tlFF4HuSpaIPXd/yvhl4/H/r5NhnOZl3fb/xLMOvtwpTGOoDA0AAAAASUVORK5CYII=" onclick="storeCaret('u')" />
-			<img title="strike" alt="strike"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAmVBMVEX29vbz8/Px8fHb29vW1tbMzMzJycnExMTDw8PAwMC5ubm3t7e1tbWxsbGtra2rq6upqamlpaWjo6Ofn5+YmJiWlpaRkZGPj4+Li4uFhYV+fn54eHh3d3d2dnZlZWVjY2NfX19eXl5aWlpUVFRRUVFQUFBKSkpHR0dGRkY7Ozs6Ojo2NjY0NDQxMTEjIyMbGxsXFxcAAAD////7nFW8AAAAM3RSTlP//////////////////////////////////////////////////////////////////wBxnr2OAAAACXBIWXMAAAsSAAALEgHS3X78AAAAH3RFWHRTb2Z0d2FyZQBNYWNyb21lZGlhIEZpcmV3b3JrcyA4tWjSeAAAAGdJREFUGJVjMEIDDEQKMAhwcAtLIgnIcBkZ8aoiBNjl+IGkNEKARUFJhNmIFUmLpLKqujwbVIBTFgQUNQ0MgUACooIRiPk0dNXgWngEQaS+DlyAV5sJSOqJwwX4tFREhcSkSPILEgAAZWksQB/5OBIAAAAASUVORK5CYII=" onclick="storeCaret('s')" />
-			<img title="code" alt="code"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAilBMVEXw9v3v9Pzv8/zp8vzo8Pvn7vrU5PjT4fe31PS0zvK0zfKxx+91uux4t+xyt+xxtetnt+xwtOpptOxxs+t0selwsetmrelhruhfrepfq+hlqehpqehnp+dkpuhcp+hhouZkouVapeZonORZoeZhn+ZanuVfnORnmeRWm+NYmeNkleFck+FVj+D////nLqHrAAAALnRSTlP///////////////////////////////////////////////////////////8Ago9zVQAAAAlwSFlzAAALEgAACxIB0t1+/AAAAB90RVh0U29mdHdhcmUATWFjcm9tZWRpYSBGaXJld29ya3MgOLVo0ngAAABfSURBVBiVY9BFAwxUExAW19UV4IMLMIiKSunqCvGIMkAEOCQEZVl0dZnFBOW4wAKSvIrsIMVsiiKqYAFOZWk1Vl1dFnlpDW6IGYxKCtq6uioySkxwW7R0dHU11anmdABtfShJ+RRUtgAAAABJRU5ErkJggg==" onclick="storeCaret('code')" />
-			<img title="quote" alt="quote"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAw1BMVEX////9/v77/P3w9v7z9vrv8/jp8v7o8f7r8ffm8f7l8P7p7/Xm8P7k7/7j7/7n7vXh7v7i7v7g7f7f7P7e7P7d7P7c6/3d6/7b6v3c6v3Z6f3a6f3X6P3W5/3V5v3b5fDT5v3U5v3Z5O/R5P3R5PzQ5P3Q4/3O2+q90OO1yd+zyd+txNyowNqivNect9WYtdSSsdCKq82Iqc2Ep8p8och6n8d0m8Nvl8Ful8FtlsBrlL9ei7pcirlbiblZh7hXhrf///+8niTkAAAAQXRSTlP/////////////////////////////////////////////////////////////////////////////////////ADBV7McAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAfdEVYdFNvZnR3YXJlAE1hY3JvbWVkaWEgRmlyZXdvcmtzIDi1aNJ4AAAAhUlEQVQYlWNwQAMMWARYDGztIcCYHyxgqMPEAAFa5mABO0ZmNjZeXhEREQZTeaAAhxUDOzu7kJCEhByDkTpEgItLSEhaWlERIgDUwiYsLCWloKDAYKIEMZQRaKCgGhvMUBYDOzs7PQYGVj0zfoTDLPj1bLSRXKqrb62J7HRuSw18fiEgAADW2C//lKn+KgAAAABJRU5ErkJggg==" onclick="storeCaret('quote')" />
-			<img title="link" alt="link"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAACfFBMVEXo9c3i87/d8dre8r/c8dnc8L3W8sfo6Oja7dTd773V79XT7c7V7dLT6tDS7LLT6rTJ6tHP6dDH6tDM67TM6rm27dTP6a+27cDN567d3d2z77Sr8LSo7snO5LHb29vO47Cm77C249TG3sTV19i94MS64aS03tau38+q3tyZ5b6m38zO09PB26Sz3p+M6pyz2sS03pel29Wd4Luh4prOzs6v17yb2NmZ35Ou1byr16Wh1NSu15GJ3L6h2Jih2Jmp0MOe15Wh2IuU09qK2ref14ag0M6c1pOZ1ZDDw8Oi0JDBwcGMz9WPzdvAwMBy3oGP1IKC2ICKy9mP0YVw3HmUzou8vLxs23aRzYl50a6jyIdw1pmKyNdf2KVm23WDy7SQyYZ80XJ0yctr0Y+Qx3mnu6aNwMl+xLx/y3R+ynJM2WVc02tM12SKwoN6yG5sw7OMv3V5xW6trq1zxmetra2EvX2srKxzxWZxxWRuwoE+0XZxxGVwxGNrvMFtu8Woq6pF0Gl5vXFtuM9mu7t9unJstM1qvl9ls81sssdlsMxdr9OWpYd2rXKdnZ1Pu1hopMBcp8psrGdeqK5dpsdrqmJfr1V4pGWWlpZWqHqTk5ORkZGQkJCNkI1mollSmMVrmGiFhYWDhoKBh4pOm0eBg4FfkFd5g4leh55Qk0xiimFjiHV1f4N1f4Rufol1fW14eHhsfWB3eHd3d3dLf6xGga9ydnJgfVNwcHA/hTtEgkFvb29ub25sbmo6gTZqamppamlebHFoamhXb1ZoaGhMdEpYbHdiZWJkZGRgYGBQYU9NVE1LVkpQUFBKS0pKS0xFRUVCREFAQ0VBQkFBQkP///8g4yElAAAA1HRSTlP/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////AIOAgj0AAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAfdEVYdFNvZnR3YXJlAE1hY3JvbWVkaWEgRmlyZXdvcmtzIDi1aNJ4AAABEUlEQVQYlWO4DAQsDulF5bnuPCA2AxDblauKqOibWraGQwSCHBk4uNXVrFzt4xtAArYuzGxcgoYaPtGpFskllxmYqhmlpMUVzZxa2uPMJRYpMbgZCCvICHgHtjVF+QV7RnYzZPAZ64kKNXYkxmZmZjXrLGcoYw0I09Tqr3GOqazvnSy7naGKMyHJaFLn3NqIvInT58jvYSgQ87dJW7awZ/Wmzat6FnTtYAix1q1YOYtd0nfpGmVJj1kHGXin8C/Zon3k7LGZ646dWeuxgeFyTv76xdp9F0JNvErPT/WYD3T6hK27tfdfOnf69LmLJzy2gTw379TsuuJp2zZOKy6ccQgkcDnl5NEDBw6v2LVz73E5AJZ9dkiYLIhdAAAAAElFTkSuQmCC" onclick="storeCaret('url')" />
-			<img title="pictures" alt="pictures"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAB11BMVEXz9Pfy9Pfv9Pfx9Pfv9Pjy8/Pu8/ju8/fx8vPt8vjt8vfr8vfr8vjs8ffs8Pbs8Pfr8Pfq8ffo7/fn7/bm7fbo7vHm7vTq7O7o6Ojf5vDS4vfc3t7d3d205f7b29u05P2z4/yx4fqw4PjW2Nmu3/eu3vav3vWv3vav3fWu3fKu3fSs3PKs3PHT09Or2vOq2vOt2u/O09Oq2fLOzs7Dw8PBwcHAwMCcx+a8vLyXxOKVw9+YwNOktc+hs9CHvMiCueSBueSdsM6tra2srKyipamjpamHqr1yqd6foKOCp7tyqN1yp95yp91zptqenp6DpLN/pbpxptydnZ2CpLV9o7mAo7V7orl5obl8oKN5n6pynsuWlpZ1naV6maSRkZGQkJB4kr6NjpBtlZuKi4yIio5vjayDh4qFhYWEhIV+ho15hpN9hY5/gYR6gollhLF6gYdmgrJ8fX57fH1Xgatkf456enpbgJVdfbFWf6h4eHhVfqV3d3dUfKNUeK5eeJFycnJwc3VPda5QdaxPda9wcHBvb29Nc6xubm5bcI9qampHbqxFbqxoaGhFbKxFbKpEbKpJaZlkZGRXY29gYGBMUVtQUFA8UmhKSktKS0tFRkdFRUVDQ0T///8xHRfLAAAAnXRSTlP///////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////8Ay/y8TAAAAAlwSFlzAAALEgAACxIB0t1+/AAAAB90RVh0U29mdHdhcmUATWFjcm9tZWRpYSBGaXJld29ya3MgOLVo0ngAAADiSURBVBiVY5iDBhjm2BQ0dYNALxC0OQIF8qRZgYAJDERrgQJNHGUxEZHh4eEBASWCzUCBLoZQbTUQUFR0EwILMLvJykOAm3AjSIApWENDQwcE/MXAAuxJ5paWdg4ODtaxImABrip3IAgEghqwQDdvsXdqWlB+lG9uUHIHSECgoi5eQsYsM0tZxiTej2FOP/+0BsNJMybGVU6cnmNSyjCnjy87w1BqpoWxqfNMSZN0hjnl4h6thoWzZ0+dOmtWkUkLwxzbhAlTUlycoluqo51cE3sYQF6Wm9zZ2m6qW9/aOVkOAEalXh3wB5XXAAAAAElFTkSuQmCC" onclick="storeCaret('img')" />
-			<img title="movies" alt="movies"
-			     src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABAAAAAQCAMAAAAoLQ9TAAAAA3NCSVQICAjb4U/gAAAAn1BMVEXv7+/p6enm5ubk5OTh4eHg4ODf39/e3t7Z2dnX19fW1tbLy8vJycnExMTAwMC+vr69vb25ubm4uLi3t7e2tra1tbW0tLSzs7OxsbGvr6+urq6tra2srKyrq6uqqqqpqamoqKinp6empqalpaWkpKSjo6OioqKhoaGfn5+enp6dnZ2cnJybm5uYmJiXl5eVlZWUlJSRkZGQkJCOjo7///+U619zAAAANXRSTlP/////////////////////////////////////////////////////////////////////AHy10AoAAAAJcEhZcwAACxIAAAsSAdLdfvwAAAAfdEVYdFNvZnR3YXJlAE1hY3JvbWVkaWEgRmlyZXdvcmtzIDi1aNJ4AAAAjUlEQVQYlXXP6xLBMBAF4KDUtYg26S0uQRGNquz7P5vJLjPGcP7tt7NzZhl8hf2GhRAi4+wNHSEDgEGhui+QceB3Ya4JJsuUznURIUgeEXBVIaSrOUG8PSEkcU5w2GiEsNwTWDOilmw99fPscqSWXU8ZD/eqbxHOyfBaA9yacekQTG1tA9C2D+f+PveRJ8fLK8i1PDRaAAAAAElFTkSuQmCC" onclick="storeCaret('video')" />
-		</div>
-</div>
 	<p>
 		<input type="text" name="title" id="title" />
 
