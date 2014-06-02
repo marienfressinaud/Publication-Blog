@@ -34,6 +34,16 @@ function retrieveData() {
 	var c = localStorage.getItem('content');
 	document.querySelector('#title').value = t;
 	document.querySelector('#contenu').value = c;
+
+	countWords();
+}
+
+function countWords() {
+	var content = document.querySelector('#contenu').value;
+	var count = content.split(/[^\wéèêàâùûçîïô]/).filter(function(v) {
+		return v !== '';
+	}).length;
+	document.querySelector('#count').innerHTML = count;
 }
 
 
@@ -41,8 +51,11 @@ window.onload = function() {
 	retrieveData();
 	var interval = window.setInterval(saveData, 2000);
 
-	fitToContent( "contenu", 50000 , 100);
-	document.getElementById("contenu").onkeyup = function() { fitToContent( this, 50000 , 100);};
+	fitToContent("contenu", 50000 , 100);
+	document.getElementById("contenu").onkeyup = function() {
+		countWords();
+		fitToContent(this, 50000 , 100);
+	};
 };
 </script>
 
@@ -71,6 +84,13 @@ textarea:focus {
 	box-shadow: 3px 3px 3px #ddd inset;
 }
 
+#count_words {
+	padding: 5px 0;
+	color: #aaa;
+	text-align: right;
+	font-style: italic;
+}
+
 #copy {
 	margin: 20px 0 0;
 	font-size: 80%; text-align: center;
@@ -92,6 +112,9 @@ textarea:focus {
 		border: none;
 		border-radius: 0;
 	}
+	textarea {
+		border-top: 1px solid #ddd;
+	}
 	input[type="text"]:focus,
 	textarea:focus {
 		box-shadow: 0 3px 3px #ddd inset;
@@ -105,6 +128,8 @@ textarea:focus {
 
 		<textarea name="content" id="contenu"></textarea>
 	</p>
+
+	<div id="count_words"><span id="count">0</span> words</div>
 
 	<div id="copy">
 		<a href="http://copyheart.org/" target="_blank">♡ Copying is an act of love. Please copy.</a>
